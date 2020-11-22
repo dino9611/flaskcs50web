@@ -1,0 +1,9 @@
+   try: //delete
+        post = Post.query.filter_by(id=2).first()
+        print(post)
+        db.session.delete(post)
+        db.session.commit()
+    except Exception as e:
+
+        print("Failed delete mahasiswa")
+        print(e)

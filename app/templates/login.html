@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+
+{% block head%}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<!-- <link rel="stylesheet" href="../static/css/style.css" > -->
+<!-- <style>
+    .bg-gradiend{
+    background: rgb(100,53,201) !important;
+    background: linear-gradient(32deg, rgba(100,53,201,1) 13%, rgba(155,115,240,1) 49%, rgba(213,214,250,1) 81%) !important;
+}
+</style> -->
+
+{% endblock%}
+{% block title %}
+    Login
+{% endblock %}
+
+{% block main %}
+    <!-- {% if get_flashed_messages() %}
+    <header>
+        <div class="alert alert-danger border text-center" role="alert">
+            {{ get_flashed_messages() | join(" ") }}
+        </div>
+    </header>
+    {% endif %} -->
+    <div class="">
+        <div class=' d-flex align-items-center justify-content-center ' style="height: 60vh;">
+            <form class="ui form" action="/login" method="post">
+                <div class=" card p-5">
+                    <h2 class="ui header">Login</h2>
+                    <div class="field ">
+                        <label >Username</label>
+                        <input type="text" placeholder="Username" autofocus name="username">
+                    </div>
+                    <div class="field">
+                        <label >Password</label>
+                        <input  name="password" placeholder="Password" type="password">
+                    </div>
+                    <button class="ui animated button violet mt-3 " type="submit" tabindex="0">
+                        <div class="visible content ">Log In</div>
+                        <div class="hidden content">
+                            <i class="right arrow icon"></i>
+                        </div>
+                    </button>
+                </div>
+                <!-- <div class="form-group">
+                    <input autocomplete="off" autofocus class="form-control " name="username" placeholder="Username" type="text">
+                </div> -->
+                <!-- <button class="btn btn-primary " type="submit">Log In</button> -->
+            </form>
+        </div>
+
+    </div>
+ 
+        
+    
+    <!-- {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content p-3">
+                             <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>  
+                            <div>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div >
+                                <h4>
+                                    {{ message }}
+                                </h4> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}  -->
+
+            <script>
+                // Swal.fire({
+                //     title: 'Error!',
+                //     text: 'Do you want to continue',
+                //     icon: 'error',
+                //     confirmButtonText: 'Cool'
+                // })
+                // $('#exampleModal').modal('show')
+            </script>
+    
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Post Detail
+{% endblock %}
+
+{% block main %}
+  <div class="container p-5">
+    <div class="row ">
+      <div class="col-md-8">
+        <div id='likedcontain'>
+          {% if data.data(session.user_id)["userlikes"] %}
+          <div class="ui animated labeled button" tabindex="0">
+            <div class="ui red button" id='tidaksuka' onclick="unlike()">
+              <i class="heart icon"></i> Liked
+            </div>
+            <a class="ui basic red left pointing label">
+              {% if data %}
+                {{data.data(session.user_id)["totallike"]}}
+              {% else %}
+                100
+              {% endif %}
+            </a>
+          </div>
+          {% else %}
+          <div class="ui labeled button" tabindex="0">
+            <div class="ui gray button" id='like' onclick="like()">
+              <i class="heart icon"></i> Like
+            </div>
+            <a class="ui basic gray left pointing label">
+              {% if data %}
+                {{data.data(session.user_id)["totallike"]}}
+              {% else %}
+                100
+              {% endif %}
+            </a>
+          </div>
+          {% endif %}
+        
+        
+        </div>
+        <div class="ui comments">
+            <h3 class="ui dividing header">Comments</h3>
+            {% for comment in comments %}
+            <div class="comment">
+              <div class="content">
+                <a class="author">{{comment["username"]}}</a>
+                <div class="metadata">
+                  <span class="date">{{comment["created_date"]}}</span>
+                </div>
+                <div class="text">
+                  {{comment["comments"]}}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            <form class="ui reply form" ction="/post/{{postid}}" method="post">
+              <div class="field">
+                <textarea name='comment'></textarea>
+              </div>
+              <button type="submit" class="ui blue labeled submit icon button">
+                <i class="icon edit"></i> Add Reply
+              </button>
+            </form>
+          </div>
+      </div>
+      <div class="col-md-4">
+        <div class="ui card">
+          <div class="image">
+            <img src="{{data.foto}}" style="height: 200px;object-fit: cover;">
+          </div>
+          <div class="content">
+            <a class="header">{{data.data(session.user_id)["users"]}}</a>
+            <div class="description">
+            {{data.caption}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+  var userid=`{{session.user_id}}`
+  console.log(userid)
+  function like(){
+    var userid=`{{session.user_id}}`
+    if(userid){
+      fetch(`/like?userid={{session.user_id}}&postid={{postid}}`)
+      .then(response=>response.json())
+      .then(data=>{
+        if(data.message=='berhasil'){
+          document.getElementById('likedcontain').innerHTML=`
+          <div class="ui animated labeled button" tabindex="0">
+            <div class="ui red button" id='tidaksuka' onclick="unlike()">
+              <i class="heart icon"></i> Liked
+            </div>
+            <a class="ui basic red left pointing label">
+              ${data.totallike}
+            </a>
+          </div>
+          `
+        }
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }else{
+      Swal.fire({
+          title: 'warning!',
+          text: 'harus login',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+      })
+    }
+  
+  }
+  function unlike(){
+    fetch(`/unlike?userid={{session.user_id}}&postid={{postid}}`)
+    .then(response=>response.json())
+    .then(data=>{
+      if(data.message=='berhasil'){
+        document.getElementById('likedcontain').innerHTML=`
+        <div class="ui labeled button" tabindex="0">
+          <div class="ui gray button" id='like' onclick="like()">
+            <i class="heart icon"></i> Like
+          </div>
+          <a class="ui basic gray left pointing label">
+            ${data.totallike}
+          </a>
+        </div>
+        `
+      }
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+</script>
+
+{% endblock %}

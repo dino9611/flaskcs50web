@@ -1,0 +1,51 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    font-family: 'Lato', sans-serif !important;
+}
+main .form-control{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    /* width: auto !important; */
+}
+.tambah_form{
+    width: auto !important;
+}
+.tambah{
+    width: 100% !important;
+}
+.coba{
+    color: red !important;
+}
+.kotak{
+    border-radius: 5% !important;
+    border: 2px solid black !important
+}
+main img{
+    /* constrain images on small screens */
+    max-width: 100%;
+}
+main{ 
+    /* scroll horizontally as needed */
+    overflow-x: auto;
+    
+    /* center contents */
+    /* text-align: center; */
+}
+
+main a{
+    color: black !important;
+}
+.hilangkan:hover{
+    text-decoration: none;
+}
+/* 
+main .bg-gradiend{
+    background: rgb(100,53,201) !important;
+    background: linear-gradient(32deg, rgba(100,53,201,1) 13%, rgba(155,115,240,1) 49%, rgba(213,214,250,1) 81%) !important;
+} */
+
