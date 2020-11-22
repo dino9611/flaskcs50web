@@ -48,4 +48,5 @@ if __name__=="__main__":
 
 # Listen for errors
 # for code in default_exceptions:
-#     app.errorhandler(code)(errorhandler)
+#     app.errorhandler(code)(errorhandler) 
+# coba ajaaa hehehe
