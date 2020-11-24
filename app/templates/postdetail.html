@@ -54,7 +54,7 @@
               </div>
             </div>
             {% endfor %}
-            <form class="ui reply form" ction="/post/{{postid}}" method="post">
+            <form class="ui reply form" action="/post/{{postid}}" method="post">
               <div class="field">
                 <textarea name='comment'></textarea>
               </div>
@@ -70,12 +70,13 @@
             <img src="{{data.foto}}" style="height: 200px;object-fit: cover;">
           </div>
           <div class="content">
-            <a class="header">{{data.data(session.user_id)["users"]}}</a>
+            <a class="header" href="/user/{{data.user_id}}">{{data.data(session.user_id)["users"]}}</a>
             <div class="description">
             {{data.caption}}
             </div>
           </div>
         </div>
+        <a class=" ui button violet text-white" style="text-transform: capitalize;" href="/user/{{data.user_id}}">To {{data.data(session.user_id)["users"]}} Profile</a>
       </div>
     </div>
   </div>

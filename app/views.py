@@ -11,6 +11,7 @@ from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 import moment,timeago
 import datetime
+from functools import wraps
 app.config["SECRET_KEY"] = "OCML3BRawWEUeaxcuKHLpw"
 app.config["IMAGE_UPLOADS"] ='app/static/upload'
 app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG", "GIF"]
@@ -30,6 +31,20 @@ def allowed_image(filename):
         return True
     else:
         return False
+
+def login_required(f):
+    """
+    Decorate routes to require login.
+
+    http://flask.pocoo.org/docs/1.0/patterns/viewdecorators/
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 @app.route('/',methods=['GET','POST'])
 def index():
@@ -193,9 +208,8 @@ def postdetail(postid):
                 "created_date":timeago.format(tanggal,now)
             })
             # comment["tanggal"]=timeago.format(tanggal,now)
-
-        # print(timeago.format(tanggal,datetime.datetime.now()))
-        # print (timeago.format(tanggal, now))
+            # print(timeago.format(tanggal,datetime.datetime.now()))
+            # print (timeago.format(tanggal, now))
         print(comments)
         return render_template('postdetail.html',postid=postid,data=post,comments=comments)
 
@@ -226,12 +240,46 @@ def UserDetail(iduser):
                 return redirect(request.url)
 
     post=Post.query.filter(Post.user_id == iduser).all()
-    print(post)
-    return render_template('userProfile.html',iduser=iduser,data=post)
+    res=User.query.filter(User.id == iduser).first()
+    return render_template('userProfile.html',iduser=iduser,data=post,post=len(post),datauser=res)
+
+@app.route("/passwordchange",methods=['GET','POST'])
+@login_required
+def PasswordChange():
+    return render_template('passwordchange.html')
 
 
-@app.route("/register")
+@app.route("/register",methods=['GET','POST'])
 def Register():
+    if request.method == "POST":
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            flash('must have username','error')
+            return redirect(request.url)
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            flash('must have password','error')
+            return redirect(request.url)
+        elif not request.form.get("confirmation"):
+            flash('must have Confirmation','error')
+            return redirect(request.url)
+        elif request.form.get("confirmation") != request.form.get("password"):
+            flash('pass dan confirm harus sama','error')
+            return redirect(request.url)      
+        usernameuser=request.form.get("username")
+        passworduser=request.form.get("password")
+
+        checkres=User.query.filter(User.username == usernameuser).all()
+        if len(checkres) > 0 :
+            flash('username telah terdaftar','error')
+            return redirect(request.url)
+        else:
+            users = User(username=usernameuser, password=generate_password_hash(passworduser))
+            db.session.add(users)
+            db.session.commit()
+            res=User.query.filter(User.username == usernameuser).all()
+            session["user_id"] = res[0].id
+            return redirect('/')
     return render_template('register.html')
 
 @app.route("/logout")

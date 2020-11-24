@@ -5,15 +5,47 @@
 
 {% endblock%}
 {% block title %}
-    User Profile
+  {{datauser.username}}'s Profile
 {% endblock %}
 
 {% block main %}
+
+
+  {% if session.user_id|int() == iduser|int() and post !=0  %}
+  <div class="ui horizontal divider header">
+    <div>
+      <i class="camera retro icon iconprof" style="font-size: 30px;" id='myBtn' ></i>
+    </div>
+    <div>
+      Add Post
+    </div>
+  </div>
+  {% endif %}
+  <div class="container pt-5">
+    <div class="d-flex ">
+      <div class="d-flex">
+        <div class="mr-3">
+          <i class="heart user icon iconprof align-self-center"  style="font-size: 40px;"></i> 
+        </div>
+        <div style="font-weight: 800;text-transform: uppercase;letter-spacing: 5px;font-size: 28px;" class="iconprof">
+          {{datauser.username}}
+        </div>
+      </div>
+      {% if session.user_id|int() == iduser|int()  %}
+      <div class="ml-auto">
+        <a style="width: 120px;" class="text-white ui button violet" href="/passwordchange"> <i class=" cog icon iconprof " style="color: white;"  ></i>   Setting</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
  <div class="container p-5">
-    {% if session.user_id %}
+    <!-- {% if session.user_id %}
         <input type="button" class="btn btn-primary"  id='myBtn' value='add'/>
-    {% endif %}
-    <div class="row mt-2">
+        {{iduser}} {{session.user_id}}
+    {% endif %} -->
+    {% if post !=0  %}
+      <div class="row mt-2">
         {% for post in data%}
         <div class="col-md-3 mt-2">
           <a href="/post/{{post.id}}">
@@ -36,9 +68,24 @@
             </div>
           </a>
         </div>
-        {%endfor  %}
-             
- </div>
+        {%endfor  %}   
+    </div>
+    {% else %}
+      {% if session.user_id|int() == iduser|int()  %}
+        <div class="d-flex  justify-content-center align-items-center" style="border: #6435c9 dashed 5px ;height: 60vh;flex-direction: column;">
+            <h1>
+              No Post
+            </h1>
+            <div class="mt-5">
+              <i class="camera retro icon iconprof" style="font-size: 30px;" id='myBtn' ></i>
+            </div>
+            <div>
+              Add Post
+            </div>
+        </div>  
+      {% endif %}
+    {% endif %}
+ 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog ">
             <div class="modal-content p-3">
