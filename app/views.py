@@ -246,6 +246,38 @@ def UserDetail(iduser):
 @app.route("/passwordchange",methods=['GET','POST'])
 @login_required
 def PasswordChange():
+    if request.method == "POST":
+        if not request.form.get("oldpassword"):
+            flash('must have Old Password','error')
+            return redirect(request.url)
+        # Ensure password was submitted
+        elif not request.form.get("newpassword"):
+            flash('must have New Password','error')
+            return redirect(request.url)
+        elif not request.form.get("confirmnewpassword"):
+            flash('must have Confirm New Password','error')
+            return redirect(request.url)
+        
+
+        oldpassword = request.form.get("oldpassword")
+        newpassword = request.form.get("newpassword")
+        confirmpassword=request.form.get("confirmnewpassword")
+        res=User.query.filter(User.id == session.get("user_id")).all()
+
+        if check_password_hash(res[0].password, oldpassword):
+            if newpassword == confirmpassword:
+                res[0].password=generate_password_hash(newpassword)
+                db.session.commit()
+                flash('Password has Changed','success')
+                return redirect(request.url)
+            else:
+                flash('new password and confrimation not same','error')
+                return redirect(request.url)    
+        else:
+            flash('Old Password Wrong','error')
+            return redirect(request.url)
+
+        
     return render_template('passwordchange.html')
 
 
@@ -270,6 +302,7 @@ def Register():
         passworduser=request.form.get("password")
 
         checkres=User.query.filter(User.username == usernameuser).all()
+        
         if len(checkres) > 0 :
             flash('username telah terdaftar','error')
             return redirect(request.url)
